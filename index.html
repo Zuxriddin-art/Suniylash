@@ -749,6 +749,21 @@
     justify-content: flex-start;
   }
   .form-hint { margin: 0; text-align: center; font-size: 12.5px; font-weight: 350; color: rgba(226,229,228,.6); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .sent { display: none; padding: 28px 0 8px; text-align: center; }
+  .sheet.sent-done .sent { display: grid; justify-items: center; }
+  .sheet.sent-done form { display: none; }
+  .sent-mark { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; background: #fff; }
+  .sent h3 {
+    margin: 18px 0 0;
+    font-family: "Reference Display", "Reference Sans", Onest, Arial, sans-serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -.6px;
+  }
+  .sent p { max-width: 320px; margin: 8px 0 22px; font-size: 14.5px; line-height: 21px; font-weight: 350; color: rgba(226,229,228,.74); }
+  .sent .ghost { width: 100%; }
+  .submit:disabled { opacity: .7; cursor: wait; }
   .success { display: none; }
   .sheet.done .success { display: block; }
   .sheet.done form { display: none; }
@@ -1141,6 +1156,7 @@
         <span class="field-label"><span data-i18n="f.details"></span> <span class="opt" data-i18n="f.optional"></span></span>
         <textarea class="input" name="details" data-i18n-ph="f.details.ph"></textarea>
       </label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <p class="form-error" id="formError" role="alert"></p>
       <button class="primary-cta submit" type="submit">
         <span class="label" data-i18n="f.submit"></span>
@@ -1150,6 +1166,15 @@
       </button>
       <p class="form-hint" data-i18n="f.hint"></p>
     </form>
+
+    <div class="sent" aria-live="polite">
+      <div class="sent-mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#101010" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </div>
+      <h3 data-i18n="sent.title"></h3>
+      <p data-i18n="sent.text"></p>
+      <button class="ghost" type="button" id="sentNew" data-i18n="ok.new"></button>
+    </div>
 
     <div class="success" aria-live="polite">
       <p style="margin:0 0 14px;font-size:14px;line-height:20px;font-weight:350;color:rgba(226,229,228,.78)" data-i18n="ok.text"></p>
@@ -1174,6 +1199,9 @@
    SETTINGS — usernames and prices live here.
    ============================================================ */
 const CONFIG = {
+  // Google Apps Script web-app URL that saves orders to the "Suniylash — Buyurtmalar" sheet
+  // (see google-apps-script.js). Empty = orders open in Telegram instead.
+  orderEndpoint: "",
   instagram: "suniylash",   // Instagram username, without @
   telegram: "suniylash",    // Telegram username that receives orders, without @
   // First-screen background video (from the sample design).
@@ -1202,7 +1230,7 @@ const I18N = {
     "title.one": "Ko‘proq Mijoz.", "title.two": "Kamroq Xarajat.",
     "copy": "Brendingiz uchun kinematografik AI video reklamalar.<br>Instagram va TikTok uchun tayyor — har hafta yangi video,<br>suratga olish jamoasisiz va ortiqcha xarajatsiz.",
     "work.button": "Ishlarimiz", "work.aria": "Ishlarimizni ko‘rish",
-    "global.eyebrow": "Global daraja", "global.one": "Global Darajadagi", "global.two": "Reklama Kerakmi?",
+    "global.eyebrow": "Dunyo miqyosida", "global.one": "Dunyo Miqyosidagi", "global.two": "Reklama Kerakmi?",
     "global.copy": "Jahon brendlari darajasidagi kinematografik roliklar: g‘oya, ssenariy va AI-produksiya bitta jamoada. Kreativlikka chegara yo‘q.",
     "global.cta": "Loyihani boshlash",
     "cr.eyebrow": "Kreativ", "cr.title": "Ijodlarimiz", "cr.soon": "Tez orada", "cr.sound": "Ovozni yoqish / o‘chirish",
@@ -1220,6 +1248,11 @@ const I18N = {
     "f.submit": "Telegram orqali yuborish",
     "f.hint": "Telegram ochiladi va xabar tayyor bo‘ladi — faqat «Yuborish»ni bosing.",
     "f.required": "Iltimos, ism, telefon, biznes nomi va turini to‘ldiring.",
+    "f.send": "So‘rovni yuborish", "f.sending": "Yuborilmoqda…",
+    "f.hint.sheet": "So‘rovingiz bizga darhol yetib keladi — tez orada siz bilan bog‘lanamiz.",
+    "order.sub.sheet": "Paketni tanlang va ma’lumotlaringizni qoldiring — tez orada siz bilan bog‘lanamiz.",
+    "f.failed": "Yuborib bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring yoki bizga Telegram’da yozing.",
+    "sent.title": "Rahmat! So‘rovingiz qabul qilindi.", "sent.text": "Tez orada siz bilan telefon orqali bog‘lanamiz.",
     "pk.popular": "Ko‘p tanlanadi", "pk.month": "/oy", "pk.video": "/video", "pk.custom": "Kelishuv asosida",
     "pk.unsure": "Bilmayman — maslahat bering", "pk.unsure.f": "Brendingizga mos paketni o‘zimiz taklif qilamiz.",
     "pk.standart.name": "Standart", "pk.standart.f": "Oyiga 4 ta AI video (haftasiga 1 ta) · 15–30 soniya · har biriga 1 tuzatish · Instagram formati va subtitrlar",
@@ -1255,6 +1288,11 @@ const I18N = {
     "f.submit": "Отправить в Telegram",
     "f.hint": "Откроется Telegram с готовым сообщением — просто нажмите «Отправить».",
     "f.required": "Пожалуйста, укажите имя, телефон, название и сферу бизнеса.",
+    "f.send": "Отправить заявку", "f.sending": "Отправка…",
+    "f.hint.sheet": "Заявка сразу придёт к нам — мы скоро с вами свяжемся.",
+    "order.sub.sheet": "Выберите пакет и оставьте данные — мы скоро с вами свяжемся.",
+    "f.failed": "Не удалось отправить. Проверьте интернет и попробуйте снова или напишите нам в Telegram.",
+    "sent.title": "Спасибо! Заявка принята.", "sent.text": "Мы скоро свяжемся с вами по телефону.",
     "pk.popular": "Популярный", "pk.month": "/мес", "pk.video": "/видео", "pk.custom": "По договорённости",
     "pk.unsure": "Не знаю — посоветуйте", "pk.unsure.f": "Подберём пакет под ваш бренд.",
     "pk.standart.name": "Стандарт", "pk.standart.f": "4 AI-видео в месяц (1 в неделю) · 15–30 сек · 1 правка на видео · формат Instagram и субтитры",
@@ -1290,6 +1328,11 @@ const I18N = {
     "f.submit": "Send via Telegram",
     "f.hint": "Telegram opens with your order ready — just tap Send.",
     "f.required": "Please fill in your name, phone, business name and type.",
+    "f.send": "Send Request", "f.sending": "Sending…",
+    "f.hint.sheet": "Your request reaches us right away. We’ll be in touch shortly.",
+    "order.sub.sheet": "Pick a package and leave your details. We’ll be in touch shortly.",
+    "f.failed": "Couldn’t send. Check your connection and try again, or message us on Telegram.",
+    "sent.title": "Thank you! Your request is in.", "sent.text": "We’ll call you back shortly.",
     "pk.popular": "Popular", "pk.month": "/mo", "pk.video": "/video", "pk.custom": "By agreement",
     "pk.unsure": "Not sure — advise me", "pk.unsure.f": "We’ll suggest the right package for your brand.",
     "pk.standart.name": "Standard", "pk.standart.f": "4 AI videos a month (1 per week) · 15–30 sec · 1 revision per video · Instagram-ready with captions",
@@ -1448,7 +1491,33 @@ const I18N = {
   form.addEventListener("input", (e) => {
     if (e.target.matches(".input")) e.target.removeAttribute("aria-invalid");
   });
-  form.addEventListener("submit", (e) => {
+  // Orders go to the Google Sheet when an endpoint is set; otherwise they open in Telegram.
+  const useSheet = Boolean(CONFIG.orderEndpoint);
+  if (useSheet) {
+    $(".submit .label").dataset.i18n = "f.send";
+    $(".form-hint").dataset.i18n = "f.hint.sheet";
+    $(".sheet-head p").dataset.i18n = "order.sub.sheet";
+  }
+
+  async function sendToSheet(fd) {
+    const pkg = CONFIG.packages.find((p) => p.id === fd.get("package"));
+    const uz = (k) => I18N.uz[k];
+    const body = new URLSearchParams({
+      name: fd.get("name").trim(),
+      phone: fd.get("phone").trim(),
+      business: fd.get("business").trim(),
+      type: fd.get("type").trim(),
+      package: pkg ? `${uz(`pk.${pkg.id}.name`)} (${pkg.price == null ? uz("pk.custom") : `$${pkg.price}${uz(pkg.unit === "month" ? "pk.month" : "pk.video")}`})` : uz("pk.unsure"),
+      vlang: uz("f.lang." + fd.get("vlang")),
+      details: fd.get("details").trim(),
+      lang: lang,
+      website: fd.get("website") || "",
+    });
+    // Apps Script does not send CORS headers, so the response is opaque; a network error still throws.
+    await fetch(CONFIG.orderEndpoint, { method: "POST", mode: "no-cors", body });
+  }
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const missing = $$("[required]", form).filter((el) => !el.value.trim());
     missing.forEach((el) => el.setAttribute("aria-invalid", "true"));
@@ -1458,6 +1527,23 @@ const I18N = {
       return;
     }
     $("#formError").textContent = "";
+    if (useSheet) {
+      const btn = $(".submit");
+      const label = btn.querySelector(".label");
+      btn.disabled = true;
+      label.textContent = t("f.sending");
+      try {
+        await sendToSheet(new FormData(form));
+        sheet.classList.add("sent-done");
+        $(".sheet-body").scrollTop = 0;
+      } catch {
+        $("#formError").textContent = t("f.failed");
+      } finally {
+        btn.disabled = false;
+        label.textContent = t("f.send");
+      }
+      return;
+    }
     const text = buildOrder(new FormData(form));
     const url = tgUrl(text);
     $("#orderText").textContent = text;
@@ -1478,6 +1564,11 @@ const I18N = {
     }
     $("#copyBtn").textContent = t("ok.copied");
     setTimeout(() => ($("#copyBtn").textContent = t("ok.copy")), 2000);
+  });
+  $("#sentNew").addEventListener("click", () => {
+    form.reset();
+    renderPackages();
+    sheet.classList.remove("sent-done");
   });
   $("#newOrder").addEventListener("click", () => {
     form.reset();
@@ -1539,8 +1630,7 @@ const I18N = {
   $$(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
   const params = new URLSearchParams(location.search);
-  const guess = (navigator.language || "").slice(0, 2);
-  setLang(params.get("lang") || store.get("suniylash.lang") || (guess === "ru" || guess === "en" ? guess : "uz"));
+  setLang(params.get("lang") || "uz");
   setMenu(false);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
   if (params.has("order") || params.has("package") || location.hash === "#order") openSheet(params.get("package"));
