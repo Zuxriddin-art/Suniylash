@@ -1,0 +1,1550 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<title>Suniylash — AI video reklama</title>
+<meta name="description" content="Brendingiz uchun kinematografik AI video reklama. Instagram va TikTok uchun tayyor. · Кинематографичная AI-видеореклама для вашего бренда.">
+<meta property="og:title" content="Suniylash — AI video reklama">
+<meta property="og:description" content="Ko‘proq mijoz. Kamroq xarajat. Brendingiz uchun kinematografik AI video reklamalar.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var root = document.documentElement;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    root.classList.add("motion-pending");
+    window.__motionFallback = setTimeout(function () {
+      root.classList.remove("motion-pending");
+    }, 3500);
+  })();
+</script>
+<style>
+  /* Optional: drop Reference Sans / Display variable fonts into ./fonts to use them;
+     otherwise Onest (Latin + Cyrillic) is used. */
+  @font-face {
+    font-family: "Reference Sans";
+    src: local("Reference Sans"), url("fonts/ReferenceSans-Variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Reference Display";
+    src: local("Reference Display"), url("fonts/ReferenceDisplay-Variable.woff2") format("woff2");
+    font-weight: 400 900;
+    font-display: swap;
+  }
+
+  :root {
+    font-family: "Reference Sans", Onest, Arial, sans-serif;
+    color-scheme: dark;
+    --ease-out: cubic-bezier(.16, 1, .3, 1);
+    --ease-line: cubic-bezier(.22, 1, .36, 1);
+    --glass-border: rgba(255,255,255,.14);
+    --glass-bg: linear-gradient(145deg, rgba(24,30,32,.80), rgba(6,12,14,.88));
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; cursor: pointer; padding: 0; margin: 0; -webkit-tap-highlight-color: transparent; }
+  img, svg, video { display: block; }
+  :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  body { overflow-x: hidden; }
+  body.sheet-open { overflow: hidden; }
+
+  /* ---------- Frame ---------- */
+  .viewport {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    min-height: 520px;
+    isolation: isolate;
+    overflow: hidden;
+    background: #000;
+  }
+  .screen {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    background: #000;
+    overflow: hidden;
+
+    --gutter-start: clamp(36px, 4.177vw, 96px);
+    --gutter-end: clamp(36px, 4.04vw, 96px);
+    --header-top: clamp(20px, 2.264vh, 30px);
+    --hero-bottom: clamp(34px, 5.19vh, 64px);
+    --display-size: clamp(58px, 7.64vh, 88px);
+    --display-leading: clamp(72px, 9.34vh, 106px);
+    --copy-size: clamp(14px, 1.70vh, 19px);
+    --copy-leading: clamp(19px, 2.17vh, 24px);
+    --title-copy-gap: clamp(15px, 2.08vh, 24px);
+    --copy-cta-gap: clamp(24px, 3.11vh, 36px);
+    --cta-width: clamp(142px, 15.09vh, 168px);
+    --cta-height: clamp(38px, 3.96vh, 44px);
+    --compact-control-font-size: clamp(17px, 1.75vh, 19px);
+    --action-control-font-size: clamp(17px, 1.78vh, 19.5px);
+    --primary-control-font-size: clamp(17px, 1.77vh, 19.25px);
+    --control-inline-nudge: -1px;
+    --control-baseline-shift: clamp(1px, .19vh, 2px);
+    --copy-optical-shift: clamp(0px, .1vh, 1px);
+    --watch-baseline-shift: clamp(2px, .38vh, 4px);
+    --card-width: clamp(150px, 18.96vh, 215px);
+  }
+  .background {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.03), transparent 24%, transparent 82%, rgba(0,0,0,.05)),
+      radial-gradient(ellipse at 44% 54%, transparent 30%, rgba(0,0,0,.055) 100%);
+  }
+
+  /* ---------- Header ---------- */
+  .header {
+    position: absolute;
+    inset: var(--header-top) var(--gutter-end) auto var(--gutter-start);
+    z-index: 10;
+    height: 48px;
+    display: flex;
+    align-items: flex-start;
+    white-space: nowrap;
+  }
+  .brand {
+    position: relative;
+    top: 8px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 30px;
+    font-size: 17px;
+    font-weight: 560;
+    letter-spacing: -.3px;
+    text-shadow: 0 1px 3px rgba(0,0,0,.55);
+  }
+  .brand img { flex: none; width: auto; filter: drop-shadow(0 1px 2px rgba(0,0,0,.35)); }
+  .brand-mark { height: 30px; }
+  .brand-word { height: 16px; }
+  /* Desktop: the collapsible panel dissolves so its children sit in the header row. */
+  .header-actions { display: contents; }
+  .nav {
+    order: 1;
+    position: relative;
+    top: 9px;
+    display: flex;
+    gap: clamp(32px, 2.9vw, 43px);
+    margin-left: clamp(36px, 3.03vw, 48px);
+  }
+  .nav a {
+    position: relative;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 430;
+    letter-spacing: -.36px;
+    color: rgba(229,229,230,.77);
+    text-shadow: 0 1px 3px rgba(0,0,0,.55);
+  }
+  .nav a:nth-child(1) { top: -3px; }
+  .nav a:nth-child(4) { margin-left: 1px; }
+  .nav a[aria-current="page"] { color: #fff; }
+  .nav a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,.82);
+    box-shadow: 0 1px 3px rgba(0,0,0,.35);
+  }
+  .lang {
+    order: 3;
+    flex: none;
+    display: flex;
+    gap: 2px;
+    height: 42px;
+    margin-top: 3px;
+    margin-left: auto;
+    padding: 4px;
+    border: 1px solid var(--glass-border);
+    border-radius: 9px;
+    background: var(--glass-bg);
+    box-shadow: 0 1px 5px rgba(0,0,0,.34), 0 0 0 2px rgba(255,255,255,.03) inset;
+    -webkit-backdrop-filter: blur(14px) saturate(108%);
+    backdrop-filter: blur(14px) saturate(108%);
+  }
+  .lang button {
+    min-width: 36px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 560;
+    letter-spacing: .2px;
+    color: rgba(229,229,230,.7);
+  }
+  .lang button[aria-pressed="true"] { background: #fff; color: #101010; }
+  .sign-up {
+    order: 4;
+    flex: none;
+    min-width: 109px;
+    height: 42px;
+    margin-top: 3px;
+    margin-left: clamp(12px, 1.1vw, 18px);
+    padding: 0 18px;
+    border: 0;
+    border-radius: 7px;
+    background: #fff;
+    color: #101010;
+    font-size: var(--compact-control-font-size);
+    font-weight: 460;
+    letter-spacing: -.34px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 1px 5px rgba(0,0,0,.34);
+  }
+  .sign-up span {
+    position: relative;
+    left: var(--control-inline-nudge);
+    top: var(--control-baseline-shift);
+  }
+
+  /* Glass: menu toggle (hidden on desktop) */
+  .menu-toggle {
+    order: 5;
+    display: none;
+    flex: none;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin-top: 1px;
+    margin-left: 8px;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 11px;
+    color: #fff;
+    background: linear-gradient(145deg, rgba(26,34,36,.72), rgba(8,14,16,.8));
+    box-shadow: 0 2px 10px rgba(0,0,0,.36), 0 0 0 2px rgba(255,255,255,.03) inset;
+    -webkit-backdrop-filter: blur(14px) saturate(108%);
+    backdrop-filter: blur(14px) saturate(108%);
+  }
+  .menu-toggle .bar {
+    transform-origin: 12px 12px;
+    transition: transform 320ms var(--ease-out);
+  }
+  .header.menu-open .menu-toggle .bar-top { transform: rotate(45deg) translateY(3px); }
+  .header.menu-open .menu-toggle .bar-bottom { transform: rotate(-45deg) translateY(-3px); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .hero > * { pointer-events: auto; }
+  .hero-content {
+    position: absolute;
+    left: var(--gutter-start);
+    bottom: var(--hero-bottom);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-title {
+    --fit: 1;
+    margin: 0;
+    font-family: "Reference Display", "Reference Sans", Onest, Arial, sans-serif;
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-size: calc(var(--display-size) * var(--fit));
+    line-height: calc(var(--display-leading) * var(--fit));
+    letter-spacing: -2.1px;
+    -webkit-text-stroke: .12px currentColor;
+    white-space: nowrap;
+    text-shadow: 0 2px 2px rgba(0,0,0,.44);
+  }
+  .line { display: block; transform-origin: left center; }
+  .line-reveal { display: inline-block; }
+  .line-one { color: #fff; transform: scaleX(.775); }
+  .line-two { color: rgba(211, 207, 207, .78); transform: scaleX(.793); }
+  .hero-copy {
+    position: relative;
+    left: 1px;
+    top: var(--copy-optical-shift);
+    width: clamp(390px, 31.67vw, 500px);
+    margin: var(--title-copy-gap) 0 0;
+    font-size: var(--copy-size);
+    line-height: var(--copy-leading);
+    font-weight: 350;
+    letter-spacing: .13px;
+    color: rgba(226, 229, 228, .84);
+    text-shadow: 0 1px 3px rgba(0,0,0,.7);
+  }
+  .primary-cta {
+    position: relative;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--cta-width);
+    height: var(--cta-height);
+    margin-top: var(--copy-cta-gap);
+    padding: 0 calc(var(--cta-height) * .75 + 26px) 0 13px;
+    border: 0;
+    border-radius: 7px;
+    background: #fff;
+    color: #111;
+    font-size: var(--primary-control-font-size);
+    box-shadow: 0 1px 5px rgba(0,0,0,.38);
+  }
+  .primary-cta .label {
+    position: relative;
+    left: var(--control-inline-nudge);
+    top: var(--control-baseline-shift);
+    font-weight: 450;
+    letter-spacing: -.3px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .arrow-box {
+    position: absolute;
+    right: 5px;
+    top: 14.286%;
+    height: 71.429%;
+    aspect-ratio: 33 / 31.4;
+    border-radius: 7px;
+    background: #070909;
+    display: grid;
+    place-items: center;
+  }
+
+  /* ---------- Work card (glass) ---------- */
+  .demo-card {
+    position: absolute;
+    right: var(--gutter-end);
+    bottom: var(--hero-bottom);
+    width: var(--card-width);
+    aspect-ratio: 201 / 265;
+    container-type: inline-size;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: clamp(12px, 1.52vh, 18px);
+    background: linear-gradient(145deg, rgba(24,22,20,.80), rgba(5,12,14,.86));
+    box-shadow:
+      0 2px 10px rgba(0,0,0,.44),
+      0 0 0 3px rgba(255,255,255,.035) inset,
+      0 0 0 1px rgba(0,0,0,.9);
+    -webkit-backdrop-filter: blur(14px) saturate(108%);
+    backdrop-filter: blur(14px) saturate(108%);
+  }
+  .demo-visual {
+    position: absolute;
+    left: 3.5cqw;
+    top: 4cqw;
+    width: 92.5cqw;
+    height: 92cqw;
+    border-radius: 4cqw;
+    overflow: hidden;
+    background: #101a1e;
+  }
+  .demo-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(.89) saturate(.93) contrast(1.03);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+  }
+  .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 29cqw;
+    height: 29cqw;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(255,255,255,.34);
+    border-radius: 50%;
+    background: rgba(3,5,7,.47);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    display: grid;
+    place-items: center;
+  }
+  .play svg { width: 38%; height: 38%; margin-left: 6%; }
+  .watch-button {
+    position: absolute;
+    left: 3.5cqw;
+    width: 92.5cqw;
+    top: 100cqw;
+    bottom: 4cqw;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.21);
+    border-radius: 3.5cqw;
+    background: linear-gradient(145deg, rgba(26,34,36,.86), rgba(16,29,33,.9));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    font-size: min(var(--action-control-font-size), 11.5cqw);
+    font-weight: 430;
+    letter-spacing: -.3px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .watch-button span {
+    position: relative;
+    left: var(--control-inline-nudge);
+    top: calc(var(--watch-baseline-shift) * .5);
+  }
+
+  /* ---------- Shared section type ---------- */
+  .eyebrow { font-size: 12.5px; font-weight: 560; letter-spacing: .16em; text-transform: uppercase; color: rgba(240,240,240,.55); }
+  .block {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: clamp(72px, 12vh, 140px) clamp(20px, 4.1vw, 96px) 0;
+  }
+  .block-head { max-width: 640px; margin-bottom: clamp(28px, 4.5vh, 48px); }
+  .block-title {
+    width: 122%;
+    margin: 12px 0 0;
+    font-family: "Reference Display", "Reference Sans", Onest, Arial, sans-serif;
+    font-size: clamp(40px, 5.6vw, 76px);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -1.6px;
+    transform: scaleX(.82);
+    transform-origin: left center;
+  }
+  .block-sub { max-width: 520px; margin: 14px 0 0; font-size: 16px; line-height: 24px; font-weight: 350; color: rgba(226,229,228,.72); }
+
+  /* ---------- Global statement (video background) ---------- */
+  .statement {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 96px 20px;
+    overflow: hidden;
+    isolation: isolate;
+    text-align: center;
+    --cta-width: 168px;
+    --cta-height: 46px;
+    --primary-control-font-size: 17px;
+    --control-inline-nudge: -1px;
+    --control-baseline-shift: 1px;
+  }
+  .statement-video {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .statement::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, #000 0%, transparent 18%, transparent 82%, #000 100%),
+      radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.28), rgba(0,0,0,.72) 78%);
+  }
+  .statement-inner { display: grid; justify-items: center; max-width: 960px; }
+  .statement-title {
+    margin: 16px 0 0;
+    font-family: "Reference Display", "Reference Sans", Onest, Arial, sans-serif;
+    font-size: clamp(44px, 7vw, 104px);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -2px;
+    -webkit-text-stroke: .12px currentColor;
+    text-shadow: 0 2px 2px rgba(0,0,0,.44);
+  }
+  .statement-title .line { transform-origin: center; }
+  .statement-title .line-one { transform: scaleX(.8); }
+  .statement-title .line-two { transform: scaleX(.8); }
+  .statement-copy {
+    max-width: 560px;
+    margin: 22px 0 0;
+    font-size: clamp(15px, 1.25vw, 18px);
+    line-height: 1.55;
+    font-weight: 350;
+    letter-spacing: .13px;
+    color: rgba(226,229,228,.86);
+    text-shadow: 0 1px 3px rgba(0,0,0,.7);
+  }
+  .statement .primary-cta { margin-top: 30px; }
+
+  /* ---------- Creations ---------- */
+  .creations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
+  .creation { margin: 0; cursor: pointer; }
+  .film-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(24,22,20,.80), rgba(5,12,14,.86));
+    box-shadow: 0 2px 10px rgba(0,0,0,.44), 0 0 0 3px rgba(255,255,255,.035) inset;
+  }
+  .film-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,.4));
+  }
+  .creation-video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+  .creation.is-vertical .film-frame::before {
+    content: "";
+    position: absolute;
+    inset: -24px;
+    background: var(--poster) center / cover;
+    filter: blur(26px) brightness(.5);
+  }
+  .creation.is-vertical .creation-video { object-fit: contain; }
+  .creation.is-empty { cursor: default; }
+  .creation-soon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 14px;
+    background:
+      radial-gradient(120% 80% at 25% 15%, rgba(214,120,60,.32), transparent 60%),
+      radial-gradient(120% 80% at 85% 90%, rgba(140,30,80,.42), transparent 60%),
+      #0b0a0c;
+    color: rgba(240,240,240,.72);
+    font-size: 14px;
+    font-weight: 460;
+    letter-spacing: .04em;
+  }
+  .creation-soon img { width: 40px; height: auto; }
+  .sound-toggle {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    background: rgba(3,5,7,.5);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .sound-toggle .on, .creation.is-unmuted .sound-toggle .off { display: none; }
+  .creation.is-unmuted .sound-toggle .on { display: block; }
+
+  /* ---------- Footer ---------- */
+  .site-footer {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: clamp(96px, 16vh, 180px) clamp(20px, 4.1vw, 96px) 28px;
+    --cta-width: 168px;
+    --cta-height: 46px;
+    --primary-control-font-size: 17px;
+    --control-inline-nudge: -1px;
+    --control-baseline-shift: 1px;
+  }
+  .footer-cta {
+    display: grid;
+    justify-items: center;
+    padding-bottom: clamp(56px, 9vh, 96px);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    text-align: center;
+  }
+  .footer-cta .block-title { width: auto; max-width: 900px; margin: 0; font-size: clamp(34px, 4.6vw, 64px); transform: none; }
+  .footer-cta .primary-cta { margin-top: 28px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 32px; padding: 44px 0; }
+  .footer-logo { display: flex; align-items: center; gap: 9px; }
+  .footer-logo img:first-child { height: 30px; width: auto; }
+  .footer-logo img:last-child { height: 16px; width: auto; }
+  .footer-brand p { max-width: 320px; margin: 14px 0 0; font-size: 14px; line-height: 21px; color: rgba(226,229,228,.6); }
+  .footer-col { display: grid; align-content: start; gap: 12px; font-size: 15px; }
+  .footer-col > a { color: rgba(229,229,230,.8); }
+  .footer-head { margin-bottom: 4px; font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: rgba(240,240,240,.45); }
+  .social {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: var(--glass-bg);
+  }
+  .social .ico { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 9px; background: rgba(255,255,255,.06); }
+  .social small { display: block; font-size: 12.5px; color: rgba(240,240,240,.5); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,.1);
+    font-size: 13px;
+    color: rgba(240,240,240,.4);
+  }
+
+  /* ---------- Order sheet (glass) ---------- */
+  .sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0,0,0,.42);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 260ms var(--ease-out), visibility 0s linear 260ms;
+  }
+  .sheet {
+    position: fixed;
+    z-index: 41;
+    top: var(--sheet-top, 20px);
+    right: var(--sheet-side, 20px);
+    bottom: var(--sheet-top, 20px);
+    width: min(460px, calc(100vw - 2 * var(--sheet-side, 20px)));
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(22,28,30,.84), rgba(5,11,13,.92));
+    box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 0 0 3px rgba(255,255,255,.03) inset;
+    -webkit-backdrop-filter: blur(18px) saturate(110%);
+    backdrop-filter: blur(18px) saturate(110%);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(14px, 0, 0) scale(.985);
+    transform-origin: 100% 50%;
+    transition: opacity 260ms var(--ease-out), transform 420ms var(--ease-out), visibility 0s linear 420ms;
+  }
+  body.sheet-open .sheet-backdrop,
+  body.sheet-open .sheet {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 260ms var(--ease-out), transform 420ms var(--ease-out), visibility 0s;
+  }
+  .sheet-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px 22px 14px;
+  }
+  .sheet-head h2 {
+    margin: 0;
+    font-family: "Reference Display", "Reference Sans", Onest, Arial, sans-serif;
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 500;
+    letter-spacing: -1px;
+  }
+  .sheet-head p { margin: 6px 0 0; font-size: 14px; line-height: 20px; font-weight: 350; color: rgba(226,229,228,.74); }
+  .sheet-close {
+    flex: none;
+    margin-left: auto;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 10px;
+    background: rgba(255,255,255,.04);
+  }
+  .sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 4px 22px 22px;
+  }
+  .sheet form { display: grid; gap: 14px; }
+  .field-label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 520; letter-spacing: .1px; color: rgba(240,240,240,.77); }
+  .field-label .opt { font-weight: 380; color: rgba(240,240,240,.5); }
+  .pkgs { display: grid; gap: 8px; }
+  .pkg { position: relative; display: block; cursor: pointer; }
+  .pkg input, .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .pkg-body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 10px;
+    background: rgba(255,255,255,.03);
+    transition: border-color 140ms ease, background 140ms ease;
+  }
+  .pkg-name { font-size: 16px; font-weight: 560; letter-spacing: -.2px; display: flex; align-items: center; gap: 8px; }
+  .pkg-tag { font-size: 11px; font-weight: 560; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
+  .pkg-price { font-size: 15px; font-weight: 560; text-align: right; font-variant-numeric: tabular-nums; }
+  .pkg-price small { font-weight: 400; color: rgba(240,240,240,.6); }
+  .pkg-feat { grid-column: 1 / -1; font-size: 13px; line-height: 18px; font-weight: 350; color: rgba(226,229,228,.7); }
+  .pkg input:checked + .pkg-body { border-color: rgba(255,255,255,.62); background: rgba(255,255,255,.08); }
+  .pkg input:focus-visible + .pkg-body, .chips input:focus-visible + span { outline: 2px solid #fff; outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips label { position: relative; cursor: pointer; }
+  .chips span {
+    display: block;
+    padding: 9px 13px;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 8px;
+    background: rgba(255,255,255,.03);
+    font-size: 14px;
+    font-weight: 460;
+  }
+  .chips input:checked + span { background: #fff; color: #101010; border-color: #fff; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .input {
+    width: 100%;
+    height: 46px;
+    padding: 0 13px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 9px;
+    background: rgba(255,255,255,.04);
+    color: #fff;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 140ms ease, background 140ms ease;
+  }
+  textarea.input { height: 84px; padding: 11px 13px; resize: none; }
+  .input::placeholder { color: rgba(240,240,240,.38); }
+  .input:focus { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.07); }
+  .input[aria-invalid="true"] { border-color: #ff6b6b; }
+  .form-error { margin: -4px 0 0; font-size: 13px; color: #ff8a8a; min-height: 0; }
+  .form-error:empty { display: none; }
+  .submit {
+    margin-top: 4px;
+    width: 100%;
+    height: 50px;
+    padding: 0 60px 0 16px;
+    font-size: 17px;
+    justify-content: flex-start;
+  }
+  .form-hint { margin: 0; text-align: center; font-size: 12.5px; font-weight: 350; color: rgba(226,229,228,.6); }
+  .success { display: none; }
+  .sheet.done .success { display: block; }
+  .sheet.done form { display: none; }
+  .success pre {
+    margin: 0 0 14px;
+    padding: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 10px;
+    background: rgba(255,255,255,.03);
+    font: inherit;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 380;
+    color: rgba(240,240,240,.9);
+  }
+  .success .btns { display: grid; gap: 8px; }
+  .ghost {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,.21);
+    border-radius: 9px;
+    background: linear-gradient(145deg, rgba(26,34,36,.86), rgba(16,29,33,.9));
+    font-size: 15px;
+    font-weight: 460;
+  }
+
+  /* ---------- Entrance motion ---------- */
+  @keyframes entrance-brand {
+    from { opacity: 0; transform: translate3d(0, 7px, 0) scale(.94); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes entrance-nav {
+    from { opacity: 0; transform: translate3d(0, 6px, 0); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes entrance-action {
+    from { opacity: 0; transform: translate3d(0, 8px, 0) scale(.985); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes entrance-line {
+    from { transform: translate3d(0, 110%, 0) skewY(2deg); }
+    to   { transform: none; }
+  }
+  @keyframes entrance-copy {
+    from { opacity: 0; transform: translate3d(0, 8px, 0) scale(.99); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes entrance-card {
+    from { opacity: 0; transform: translate3d(0, 12px, 0) scale(.968); }
+    to   { opacity: 1; transform: none; }
+  }
+  .motion-pending .brand,
+  .motion-pending .nav a,
+  .motion-pending .lang,
+  .motion-pending .sign-up,
+  .motion-pending .menu-toggle,
+  .motion-pending .hero-copy,
+  .motion-pending .primary-cta,
+  .motion-pending .demo-card { opacity: 0; }
+  .motion-pending .line { overflow: hidden; }
+  .motion-pending .line-reveal { transform: translate3d(0, 110%, 0) skewY(2deg); }
+
+  .motion-pending .brand { animation: entrance-brand 580ms var(--ease-out) 60ms both; }
+  .motion-pending .nav a:nth-child(1) { animation: entrance-nav 480ms var(--ease-out) 130ms both; }
+  .motion-pending .nav a:nth-child(2) { animation: entrance-nav 480ms var(--ease-out) 175ms both; }
+  .motion-pending .nav a:nth-child(3) { animation: entrance-nav 480ms var(--ease-out) 220ms both; }
+  .motion-pending .nav a:nth-child(4) { animation: entrance-nav 480ms var(--ease-out) 265ms both; }
+  .motion-pending .lang { animation: entrance-action 520ms var(--ease-out) 200ms both; }
+  .motion-pending .sign-up { animation: entrance-action 520ms var(--ease-out) 220ms both; }
+  .motion-pending .menu-toggle { animation: entrance-action 520ms var(--ease-out) 140ms both; }
+  .motion-pending .line-one .line-reveal { animation: entrance-line 800ms var(--ease-line) 300ms both; }
+  .motion-pending .line-two .line-reveal { animation: entrance-line 850ms var(--ease-line) 440ms both; }
+  .motion-pending .hero-copy { animation: entrance-copy 620ms var(--ease-out) 740ms both; }
+  .motion-pending .primary-cta { animation: entrance-action 560ms var(--ease-out) 960ms both; }
+  .motion-pending .demo-card {
+    transform-origin: 82% 50%;
+    animation: entrance-card 920ms var(--ease-line) 1040ms both;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+    button, a { transition: filter 140ms ease, opacity 140ms ease; }
+    button:hover, a:hover { filter: brightness(1.08); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sheet, .sheet-backdrop, .header-actions { transition: none !important; }
+  }
+
+  /* ---------- Tablet + mobile: glass dropdown menu ---------- */
+  @media (max-width: 790px), (max-width: 1100px) and (orientation: portrait) {
+    .menu-toggle { display: grid; }
+    .lang { margin-left: auto; }
+    .header-actions {
+      position: absolute;
+      top: 58px;
+      right: 0;
+      width: min(324px, calc(100vw - var(--gutter-start) - var(--gutter-end)));
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 10px;
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      background: var(--glass-bg);
+      box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 3px rgba(255,255,255,.03) inset;
+      -webkit-backdrop-filter: blur(18px) saturate(110%);
+      backdrop-filter: blur(18px) saturate(110%);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(.985);
+      transform-origin: top right;
+      transition: opacity 220ms var(--ease-out), transform 320ms var(--ease-out), visibility 0s linear 320ms;
+    }
+    .header.menu-open .header-actions {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: opacity 220ms var(--ease-out), transform 320ms var(--ease-out), visibility 0s;
+    }
+    .nav { top: 0; margin: 0; flex-direction: column; gap: 2px; }
+    .nav a,
+    .nav a:nth-child(1),
+    .nav a:nth-child(4) { top: 0; margin: 0; padding: 11px 12px; font-size: 17px; border-radius: 10px; }
+    .nav a[aria-current="page"]::after { left: 12px; bottom: 6px; width: 44px; }
+    .sign-up { width: 100%; height: 44px; margin: 12px 0 0; }
+
+    .screen { --card-width: clamp(150px, 16vh, 190px); }
+    .hero-copy { width: clamp(390px, 64vw, 500px); }
+    .demo-card { bottom: auto; top: calc(var(--header-top) + 74px); }
+  }
+
+  @media (max-width: 619px) {
+    .screen {
+      --mobile-gutter: 20px;
+      --gutter-start: max(var(--mobile-gutter), env(safe-area-inset-left));
+      --gutter-end: max(var(--mobile-gutter), env(safe-area-inset-right));
+      --header-top: max(16px, calc(env(safe-area-inset-top) + 10px));
+      --hero-bottom: max(28px, calc(env(safe-area-inset-bottom) + 20px));
+      --display-size: clamp(40px, 14.5vw, 62px);
+      --display-leading: clamp(46px, 16.4vw, 70px);
+      --copy-size: 15px;
+      --copy-leading: 21px;
+      --title-copy-gap: 14px;
+      --copy-cta-gap: 24px;
+      --cta-width: 156px;
+      --cta-height: 46px;
+      --card-width: clamp(112px, 31vw, 150px);
+    }
+    .brand { gap: 7px; }
+    .brand-mark { height: 27px; }
+    .brand-word { height: 14px; }
+    .header-actions { width: min(340px, calc(100vw - var(--gutter-start) - var(--gutter-end))); }
+    .sign-up { height: 46px; }
+    .lang { height: 40px; margin-top: 4px; }
+    .lang button { min-width: 33px; font-size: 12.5px; }
+    .hero-content { right: var(--gutter-end); }
+    .line-one { transform: scaleX(.8); }
+    .line-two { transform: scaleX(.8); }
+    .hero-copy { width: auto; max-width: 360px; }
+    .hero-copy br { display: none; }
+    .demo-card { top: clamp(176px, 32svh, 300px); }
+
+    .creations { grid-template-columns: 1fr; }
+    .statement-title { font-size: clamp(34px, 10vw, 56px); white-space: nowrap; }
+    .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    .footer-bottom { flex-direction: column; gap: 6px; }
+    .block-title { font-size: clamp(36px, 10.5vw, 48px); }
+
+    .sheet {
+      --sheet-side: 8px;
+      top: auto;
+      bottom: max(8px, env(safe-area-inset-bottom));
+      max-height: calc(100svh - 24px);
+      height: auto;
+      border-radius: 18px;
+      transform: translate3d(0, 24px, 0) scale(.99);
+      transform-origin: 50% 100%;
+    }
+    .sheet-head { padding: 18px 18px 10px; }
+    .sheet-head h2 { font-size: 26px; }
+    .sheet-body { padding: 4px 18px 18px; }
+  }
+
+  @media (max-width: 619px) and (max-height: 740px) {
+    .screen {
+      --display-size: clamp(38px, 12.6vw, 52px);
+      --display-leading: clamp(43px, 14.2vw, 58px);
+      --copy-size: 14px;
+      --copy-leading: 19px;
+      --copy-cta-gap: 20px;
+      --card-width: clamp(100px, 27vw, 124px);
+    }
+    .demo-card { top: calc(var(--header-top) + 66px); }
+  }
+
+  @media (max-height: 520px) and (orientation: landscape) {
+    .screen {
+      --header-top: max(12px, env(safe-area-inset-top));
+      --hero-bottom: max(18px, env(safe-area-inset-bottom));
+      --display-size: clamp(34px, 9.4vh, 44px);
+      --display-leading: clamp(40px, 11vh, 52px);
+      --copy-size: 13px;
+      --copy-leading: 18px;
+      --title-copy-gap: 10px;
+      --copy-cta-gap: 16px;
+      --cta-width: 140px;
+      --cta-height: 38px;
+      --compact-control-font-size: 16px;
+      --primary-control-font-size: 16px;
+      --action-control-font-size: 15px;
+      --card-width: clamp(104px, 26vh, 130px);
+    }
+    .hero-copy { width: clamp(330px, 44vw, 420px); }
+    .demo-card { top: auto; bottom: var(--hero-bottom); }
+    .header-actions { max-height: calc(100vh - 80px); overflow-y: auto; }
+    .sheet { --sheet-top: 8px; }
+  }
+</style>
+</head>
+<body>
+<main class="viewport" id="top">
+  <section class="screen" id="screen">
+    <video class="background" autoplay muted loop playsinline disablepictureinpicture aria-hidden="true"></video>
+
+    <header class="header">
+      <a class="brand" href="#" aria-label="Suniylash">
+        <img class="brand-mark" src="assets/logo-mark.png" alt="" width="25" height="30">
+        <img class="brand-word" src="assets/logo-wordmark.png" alt="Suniylash" width="64" height="16">
+      </a>
+
+      <div class="header-actions" id="tablet-navigation">
+        <nav class="nav" aria-label="Primary">
+          <a href="#" aria-current="page" data-i18n="nav.home"></a>
+          <a href="#order" data-open-order data-i18n="nav.pricing"></a>
+          <a href="#creations" data-i18n="nav.work"></a>
+          <a class="js-tg" target="_blank" rel="noopener" data-i18n="nav.contact"></a>
+        </nav>
+        <button class="sign-up" type="button" data-open-order><span data-i18n="cta.short"></span></button>
+      </div>
+
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="uz">UZ</button>
+        <button type="button" data-lang="ru">RU</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="tablet-navigation" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path class="bar bar-top" d="M5 9h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path class="bar bar-bottom" d="M5 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="line line-one"><span class="line-reveal" data-i18n="title.one"></span></span>
+          <span class="line line-two"><span class="line-reveal" data-i18n="title.two"></span></span>
+        </h1>
+        <p class="hero-copy" data-i18n-html="copy"></p>
+        <button class="primary-cta" type="button" data-open-order>
+          <span class="label" data-i18n="cta.main"></span>
+          <span class="arrow-box" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7h9M7.75 3.25 11.5 7l-3.75 3.75" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      <article class="demo-card">
+        <div class="demo-visual">
+          <img src="assets/work-thumbnail.jpg" alt="" width="640" height="640" decoding="async" draggable="false">
+          <a class="play" href="#creations" data-i18n-aria="work.aria">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15L19.5 12Z" fill="#fff"/></svg>
+          </a>
+        </div>
+        <a class="watch-button" href="#creations"><span data-i18n="work.button"></span></a>
+      </article>
+    </section>
+  </section>
+</main>
+
+<section class="statement" id="global" aria-labelledby="globalTitle">
+  <video class="statement-video" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="statement-inner">
+    <span class="eyebrow" data-i18n="global.eyebrow"></span>
+    <h2 class="statement-title" id="globalTitle">
+      <span class="line line-one"><span class="line-reveal" data-i18n="global.one"></span></span>
+      <span class="line line-two"><span class="line-reveal" data-i18n="global.two"></span></span>
+    </h2>
+    <p class="statement-copy" data-i18n="global.copy"></p>
+    <button class="primary-cta" type="button" data-open-order>
+      <span class="label" data-i18n="global.cta"></span>
+      <span class="arrow-box" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2.5 7h9M7.75 3.25 11.5 7l-3.75 3.75" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    </button>
+  </div>
+</section>
+
+<section class="block" id="creations" aria-labelledby="creationsTitle">
+  <div class="block-head">
+    <span class="eyebrow" data-i18n="cr.eyebrow"></span>
+    <h2 class="block-title" id="creationsTitle" data-i18n="cr.title"></h2>
+    <p class="block-sub" data-i18n="cr.sub"></p>
+  </div>
+  <div class="creations" id="creationGrid"></div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-cta">
+    <h2 class="block-title" data-i18n="end.title"></h2>
+    <button class="primary-cta" type="button" data-open-order>
+      <span class="label" data-i18n="cta.main"></span>
+      <span class="arrow-box" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2.5 7h9M7.75 3.25 11.5 7l-3.75 3.75" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    </button>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="assets/logo-mark.png" alt="" width="25" height="30">
+        <img src="assets/logo-wordmark.png" alt="Suniylash" width="64" height="16">
+      </div>
+      <p data-i18n="foot.about"></p>
+    </div>
+    <nav class="footer-col" aria-label="Footer">
+      <span class="footer-head" data-i18n="foot.menu"></span>
+      <a href="#top" data-i18n="nav.home"></a>
+      <a href="#creations" data-i18n="nav.work"></a>
+      <a href="#order" data-open-order data-i18n="nav.pricing"></a>
+    </nav>
+    <div class="footer-col">
+      <span class="footer-head" data-i18n="foot.contact"></span>
+      <a class="social js-tg" target="_blank" rel="noopener"><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M21.9 4.3l-3.1 14.8c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-8c.4-.3-.1-.5-.6-.2L6.7 12.9 2 11.4c-1-.3-1-1 .2-1.5L20.6 2.8c.8-.3 1.6.2 1.3 1.5z"/></svg></span><span>Telegram<small>@suniylash</small></span></a>
+      <a class="social js-ig" target="_blank" rel="noopener"><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff"/></svg></span><span>Instagram<small>@suniylash</small></span></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Suniylash</span>
+    <span data-i18n="foot.tag"></span>
+  </div>
+</footer>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<aside class="sheet" id="orderSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" inert>
+  <div class="sheet-head">
+    <div>
+      <h2 id="sheetTitle" data-i18n="order.title"></h2>
+      <p data-i18n="order.sub"></p>
+    </div>
+    <button class="sheet-close" type="button" id="sheetClose" data-i18n-aria="order.close">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body">
+    <form id="orderForm" novalidate>
+      <div>
+        <span class="field-label" data-i18n="f.package"></span>
+        <div class="pkgs" id="pkgs"></div>
+      </div>
+      <div class="row-2">
+        <label><span class="field-label" data-i18n="f.name"></span><input class="input" name="name" autocomplete="name" required></label>
+        <label><span class="field-label" data-i18n="f.phone"></span><input class="input" name="phone" type="tel" autocomplete="tel" placeholder="+998" required></label>
+      </div>
+      <div class="row-2">
+        <label><span class="field-label" data-i18n="f.business"></span><input class="input" name="business" autocomplete="organization" required></label>
+        <label><span class="field-label" data-i18n="f.type"></span><input class="input" name="type" data-i18n-ph="f.type.ph" required></label>
+      </div>
+      <div>
+        <span class="field-label" data-i18n="f.lang"></span>
+        <div class="chips">
+          <label><input type="radio" name="vlang" value="uz" checked><span data-i18n="f.lang.uz"></span></label>
+          <label><input type="radio" name="vlang" value="ru"><span data-i18n="f.lang.ru"></span></label>
+          <label><input type="radio" name="vlang" value="both"><span data-i18n="f.lang.both"></span></label>
+        </div>
+      </div>
+      <label>
+        <span class="field-label"><span data-i18n="f.details"></span> <span class="opt" data-i18n="f.optional"></span></span>
+        <textarea class="input" name="details" data-i18n-ph="f.details.ph"></textarea>
+      </label>
+      <p class="form-error" id="formError" role="alert"></p>
+      <button class="primary-cta submit" type="submit">
+        <span class="label" data-i18n="f.submit"></span>
+        <span class="arrow-box" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M21.9 4.3l-3.1 14.8c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-8c.4-.3-.1-.5-.6-.2L6.7 12.9 2 11.4c-1-.3-1-1 .2-1.5L20.6 2.8c.8-.3 1.6.2 1.3 1.5z"/></svg>
+        </span>
+      </button>
+      <p class="form-hint" data-i18n="f.hint"></p>
+    </form>
+
+    <div class="success" aria-live="polite">
+      <p style="margin:0 0 14px;font-size:14px;line-height:20px;font-weight:350;color:rgba(226,229,228,.78)" data-i18n="ok.text"></p>
+      <pre id="orderText"></pre>
+      <div class="btns">
+        <a class="primary-cta submit" id="tgAgain" target="_blank" rel="noopener" style="margin:0">
+          <span class="label" data-i18n="ok.tg"></span>
+          <span class="arrow-box" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M21.9 4.3l-3.1 14.8c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-8c.4-.3-.1-.5-.6-.2L6.7 12.9 2 11.4c-1-.3-1-1 .2-1.5L20.6 2.8c.8-.3 1.6.2 1.3 1.5z"/></svg>
+          </span>
+        </a>
+        <button class="ghost" type="button" id="copyBtn" data-i18n="ok.copy"></button>
+        <a class="ghost" id="igDm" target="_blank" rel="noopener" data-i18n="ok.ig"></a>
+        <button class="ghost" type="button" id="newOrder" data-i18n="ok.new"></button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ============================================================
+   SETTINGS — usernames and prices live here.
+   ============================================================ */
+const CONFIG = {
+  instagram: "suniylash",   // Instagram username, without @
+  telegram: "suniylash",    // Telegram username that receives orders, without @
+  // First-screen background video (from the sample design).
+  heroVideo: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_064556_051587f1-74a1-4336-8c05-4dde3594ed05.mp4",
+  // Second screen: Red Bull + Uzum highlight reel behind the "global" statement.
+  globalVideo: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/e7b86daf-7ca5-4c83-9c8e-e1896ebf1a96.mp4",
+  // "Creations" grid. vertical: true for 9:16 videos. null shows a "coming soon" card.
+  creations: [
+    { src: "assets/creations/creation-1.mp4", poster: "assets/creations/creation-1.jpg" },
+    { src: "assets/creations/creation-2.mp4", poster: "assets/creations/creation-2.jpg", vertical: true },
+    { src: "assets/creations/creation-3.mp4", poster: "assets/creations/creation-3.jpg" },
+    { src: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/b6bdd4f1-cf60-45e0-a536-2f7195393ff1.mp4", poster: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/82e0b858-16b9-42f4-8b3d-d60675559730.jpg", vertical: true },
+  ],
+  // Prices in USD. unit: "month" | "video"; price null = by agreement.
+  packages: [
+    { id: "standart", price: 210, unit: "month" },
+    { id: "premium",  price: 175, unit: "video" },
+    { id: "biznes",   price: null },
+  ],
+};
+
+const I18N = {
+  uz: {
+    "nav.home": "Bosh sahifa", "nav.pricing": "Narxlar", "nav.work": "Ishlar", "nav.contact": "Aloqa",
+    "cta.short": "Buyurtma", "cta.main": "Buyurtma berish",
+    "title.one": "Ko‘proq Mijoz.", "title.two": "Kamroq Xarajat.",
+    "copy": "Brendingiz uchun kinematografik AI video reklamalar.<br>Instagram va TikTok uchun tayyor — har hafta yangi video,<br>suratga olish jamoasisiz va ortiqcha xarajatsiz.",
+    "work.button": "Ishlarimiz", "work.aria": "Ishlarimizni ko‘rish",
+    "global.eyebrow": "Global daraja", "global.one": "Global Darajadagi", "global.two": "Reklama Kerakmi?",
+    "global.copy": "Jahon brendlari darajasidagi kinematografik roliklar: g‘oya, ssenariy va AI-produksiya bitta jamoada. Kreativlikka chegara yo‘q.",
+    "global.cta": "Loyihani boshlash",
+    "cr.eyebrow": "Kreativ", "cr.title": "Ijodlarimiz", "cr.soon": "Tez orada", "cr.sound": "Ovozni yoqish / o‘chirish",
+    "cr.sub": "Sun’iy intellekt bilan yaratilgan qisqa filmlar va g‘oyalar. Ovozni yoqish uchun videoni bosing.",
+    "end.title": "Brendingiz uchun shunday video kerakmi?",
+    "foot.about": "Brendlar uchun kinematografik AI video reklamalar.", "foot.menu": "Menyu", "foot.contact": "Aloqa", "foot.tag": "AI bilan yaratilgan",
+    "order.title": "Buyurtma berish",
+    "order.sub": "Paketni tanlang va ma’lumotlaringizni qoldiring — buyurtma Telegram orqali bizga keladi.",
+    "order.close": "Yopish",
+    "f.package": "Paket", "f.name": "Ismingiz", "f.phone": "Telefon", "f.business": "Biznes nomi", "f.type": "Biznes turi",
+    "f.type.ph": "kafe, do‘kon, salon…", "f.lang": "Video tili",
+    "f.lang.uz": "O‘zbekcha", "f.lang.ru": "Ruscha", "f.lang.both": "Ikkalasi",
+    "f.details": "Video haqida", "f.optional": "(ixtiyoriy)",
+    "f.details.ph": "Nimani reklama qilamiz? Aksiya, yangi mahsulot, manzil…",
+    "f.submit": "Telegram orqali yuborish",
+    "f.hint": "Telegram ochiladi va xabar tayyor bo‘ladi — faqat «Yuborish»ni bosing.",
+    "f.required": "Iltimos, ism, telefon, biznes nomi va turini to‘ldiring.",
+    "pk.popular": "Ko‘p tanlanadi", "pk.month": "/oy", "pk.video": "/video", "pk.custom": "Kelishuv asosida",
+    "pk.unsure": "Bilmayman — maslahat bering", "pk.unsure.f": "Brendingizga mos paketni o‘zimiz taklif qilamiz.",
+    "pk.standart.name": "Standart", "pk.standart.f": "Oyiga 4 ta AI video (haftasiga 1 ta) · 15–30 soniya · har biriga 1 tuzatish · Instagram formati va subtitrlar",
+    "pk.premium.name": "Premium", "pk.premium.f": "1 ta kinematografik, jahon brendlari darajasidagi reklama · 30–60 soniya · 2 marta tuzatish · 5–7 kun · ssenariy va storyboard oldindan tasdiqlanadi",
+    "pk.biznes.name": "Biznes", "pk.biznes.f": "Katta kampaniyalar uchun: film seriyasi, kampaniya videolari, emotsional brend film, barcha platformalar uchun versiyalar · shaxsiy menejer · kreativ strategiya · ustuvor yetkazish · narx qo‘ng‘iroqda kelishiladi",
+    "ok.text": "Telegram’da xabarni yuboring. Ochilmadimi? Buyurtmani nusxalab, bizga Telegram yoki Instagram’da yuboring.",
+    "ok.tg": "Telegram’ni ochish", "ok.copy": "Buyurtmani nusxalash", "ok.copied": "Nusxalandi ✓",
+    "ok.ig": "Instagram’da yozish", "ok.new": "Yangi buyurtma",
+    "msg.title": "Yangi buyurtma", "msg.name": "Ism", "msg.phone": "Telefon", "msg.business": "Biznes", "msg.type": "Turi",
+    "msg.package": "Paket", "msg.lang": "Video tili", "msg.details": "Izoh",
+  },
+  ru: {
+    "nav.home": "Главная", "nav.pricing": "Цены", "nav.work": "Работы", "nav.contact": "Контакты",
+    "cta.short": "Заказать", "cta.main": "Оформить заказ",
+    "title.one": "Больше Клиентов.", "title.two": "Меньше Затрат.",
+    "copy": "Кинематографичная AI-видеореклама для вашего бренда.<br>Готово для Instagram и TikTok — новое видео каждую неделю,<br>без съёмочной команды и лишних расходов.",
+    "work.button": "Наши работы", "work.aria": "Смотреть наши работы",
+    "global.eyebrow": "Глобальный уровень", "global.one": "Нужна Реклама", "global.two": "Мирового Уровня?",
+    "global.copy": "Кинематографичные ролики уровня мировых брендов: идея, сценарий и AI-продакшн в одной команде. У креатива нет границ.",
+    "global.cta": "Начать проект",
+    "cr.eyebrow": "Креатив", "cr.title": "Наши креативы", "cr.soon": "Скоро", "cr.sound": "Включить / выключить звук",
+    "cr.sub": "Короткие фильмы и идеи, созданные с помощью ИИ. Нажмите на видео, чтобы включить звук.",
+    "end.title": "Нужно такое видео для вашего бренда?",
+    "foot.about": "Кинематографичная AI-видеореклама для брендов.", "foot.menu": "Меню", "foot.contact": "Контакты", "foot.tag": "Создано с помощью AI",
+    "order.title": "Оформить заказ",
+    "order.sub": "Выберите пакет и оставьте данные — заявка придёт нам в Telegram.",
+    "order.close": "Закрыть",
+    "f.package": "Пакет", "f.name": "Ваше имя", "f.phone": "Телефон", "f.business": "Название бизнеса", "f.type": "Сфера",
+    "f.type.ph": "кафе, магазин, салон…", "f.lang": "Язык видео",
+    "f.lang.uz": "Узбекский", "f.lang.ru": "Русский", "f.lang.both": "Оба",
+    "f.details": "О видео", "f.optional": "(необязательно)",
+    "f.details.ph": "Что рекламируем? Акция, новый товар, адрес…",
+    "f.submit": "Отправить в Telegram",
+    "f.hint": "Откроется Telegram с готовым сообщением — просто нажмите «Отправить».",
+    "f.required": "Пожалуйста, укажите имя, телефон, название и сферу бизнеса.",
+    "pk.popular": "Популярный", "pk.month": "/мес", "pk.video": "/видео", "pk.custom": "По договорённости",
+    "pk.unsure": "Не знаю — посоветуйте", "pk.unsure.f": "Подберём пакет под ваш бренд.",
+    "pk.standart.name": "Стандарт", "pk.standart.f": "4 AI-видео в месяц (1 в неделю) · 15–30 сек · 1 правка на видео · формат Instagram и субтитры",
+    "pk.premium.name": "Премиум", "pk.premium.f": "1 кинематографичный ролик уровня мировых брендов · 30–60 сек · 2 раунда правок · 5–7 дней · сценарий и раскадровка утверждаются заранее",
+    "pk.biznes.name": "Бизнес", "pk.biznes.f": "Для крупных кампаний: серия фильмов, видео для кампаний, эмоциональный бренд-фильм, версии для всех платформ · личный менеджер · креативная стратегия · приоритетная сдача · цена обсуждается по телефону",
+    "ok.text": "Отправьте сообщение в Telegram. Не открылся? Скопируйте заявку и отправьте нам в Telegram или Instagram.",
+    "ok.tg": "Открыть Telegram", "ok.copy": "Скопировать заявку", "ok.copied": "Скопировано ✓",
+    "ok.ig": "Написать в Instagram", "ok.new": "Новая заявка",
+    "msg.title": "Новая заявка", "msg.name": "Имя", "msg.phone": "Телефон", "msg.business": "Бизнес", "msg.type": "Сфера",
+    "msg.package": "Пакет", "msg.lang": "Язык видео", "msg.details": "Комментарий",
+  },
+  en: {
+    "nav.home": "Home", "nav.pricing": "Pricing", "nav.work": "Work", "nav.contact": "Contact",
+    "cta.short": "Order", "cta.main": "Order Now",
+    "title.one": "More Customers.", "title.two": "Smaller Budget.",
+    "copy": "Cinematic AI video ads for your brand.<br>Ready for Instagram and TikTok — a fresh video every week,<br>no film crew, no wasted budget.",
+    "work.button": "Our Work", "work.aria": "See our work",
+    "global.eyebrow": "Global level", "global.one": "Ready For A", "global.two": "Global Commercial?",
+    "global.copy": "Cinematic films at the level of world brands: idea, script and AI production in one team. Creativity without limits.",
+    "global.cta": "Start a Project",
+    "cr.eyebrow": "Creative", "cr.title": "Creations", "cr.soon": "Coming soon", "cr.sound": "Sound on / off",
+    "cr.sub": "Short films and ideas made with AI. Tap a video to turn the sound on.",
+    "end.title": "Want a video like this for your brand?",
+    "foot.about": "Cinematic AI video ads for brands.", "foot.menu": "Menu", "foot.contact": "Contact", "foot.tag": "Made with AI",
+    "order.title": "Place an Order",
+    "order.sub": "Pick a package and leave your details — your order comes to us on Telegram.",
+    "order.close": "Close",
+    "f.package": "Package", "f.name": "Your name", "f.phone": "Phone", "f.business": "Business name", "f.type": "Business type",
+    "f.type.ph": "café, store, salon…", "f.lang": "Video language",
+    "f.lang.uz": "Uzbek", "f.lang.ru": "Russian", "f.lang.both": "Both",
+    "f.details": "About the video", "f.optional": "(optional)",
+    "f.details.ph": "What are we advertising? A promo, new product, location…",
+    "f.submit": "Send via Telegram",
+    "f.hint": "Telegram opens with your order ready — just tap Send.",
+    "f.required": "Please fill in your name, phone, business name and type.",
+    "pk.popular": "Popular", "pk.month": "/mo", "pk.video": "/video", "pk.custom": "By agreement",
+    "pk.unsure": "Not sure — advise me", "pk.unsure.f": "We’ll suggest the right package for your brand.",
+    "pk.standart.name": "Standard", "pk.standart.f": "4 AI videos a month (1 per week) · 15–30 sec · 1 revision per video · Instagram-ready with captions",
+    "pk.premium.name": "Premium", "pk.premium.f": "1 cinematic, world-brand-level commercial · 30–60 sec · 2 revision rounds · 5–7 days · script + storyboard approved before production",
+    "pk.biznes.name": "Business", "pk.biznes.f": "For larger campaigns: film series, campaign videos, emotional brand film, multi-platform versions · personal manager · creative strategy · priority delivery · price agreed by phone",
+    "ok.text": "Send the message in Telegram. Didn’t open? Copy your order and send it to us on Telegram or Instagram.",
+    "ok.tg": "Open Telegram", "ok.copy": "Copy order", "ok.copied": "Copied ✓",
+    "ok.ig": "Message on Instagram", "ok.new": "New order",
+    "msg.title": "New order", "msg.name": "Name", "msg.phone": "Phone", "msg.business": "Business", "msg.type": "Type",
+    "msg.package": "Package", "msg.lang": "Video language", "msg.details": "Notes",
+  },
+};
+
+(function () {
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  const igUrl = `https://instagram.com/${CONFIG.instagram}`;
+  const tgUrl = (text) => `https://t.me/${CONFIG.telegram}` + (text ? `?text=${encodeURIComponent(text)}` : "");
+
+  let lang = "uz";
+  const t = (k) => I18N[lang][k] ?? I18N.uz[k] ?? k;
+  const priceText = (p) => (p.price == null ? t("pk.custom") : `$${p.price}${t(p.unit === "month" ? "pk.month" : "pk.video")}`);
+
+  /* ---------- Entrance timeline ---------- */
+  const root = document.documentElement;
+  const card = $(".demo-card");
+  card.addEventListener("animationend", (e) => {
+    if (e.target !== card) return;
+    root.classList.remove("motion-pending");
+    clearTimeout(window.__motionFallback);
+  });
+
+  /* ---------- Language ---------- */
+  function renderPackages() {
+    const current = ($("input[name=package]:checked") || {}).value || "standart";
+    const items = CONFIG.packages.map((p) => ({
+      id: p.id,
+      name: t(`pk.${p.id}.name`),
+      price: priceText(p),
+      feat: t(`pk.${p.id}.f`),
+      tag: p.featured ? t("pk.popular") : "",
+    }));
+    items.push({ id: "unsure", name: t("pk.unsure"), price: "", feat: t("pk.unsure.f"), tag: "" });
+    $("#pkgs").innerHTML = items.map((p) => `
+      <label class="pkg">
+        <input type="radio" name="package" value="${p.id}"${p.id === current ? " checked" : ""}>
+        <span class="pkg-body">
+          <span class="pkg-name">${p.name}${p.tag ? `<span class="pkg-tag">${p.tag}</span>` : ""}</span>
+          <span class="pkg-price">${p.price}</span>
+          <span class="pkg-feat">${p.feat}</span>
+        </span>
+      </label>`).join("");
+  }
+
+  function setLang(next) {
+    lang = I18N[next] ? next : "uz";
+    root.lang = lang;
+    store.set("suniylash.lang", lang);
+    $$("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    $$("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml).replace(/<br>/g, "<br> "); });
+    $$("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+    $$("[data-i18n-aria]").forEach((el) => { el.setAttribute("aria-label", t(el.dataset.i18nAria)); });
+    $$(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    renderPackages();
+    fitTitle();
+  }
+
+  /* Shrink the headline if a language's wording would run past the screen edge. */
+  function fitTitle() {
+    const title = $(".hero-title");
+    title.style.setProperty("--fit", 1);
+    const left = parseFloat(getComputedStyle($(".hero-content")).left) || 0;
+    const avail = window.innerWidth - left * 2;
+    const widest = Math.max(...$$(".line-reveal", title).map((el) => el.getBoundingClientRect().width));
+    if (widest > avail) title.style.setProperty("--fit", (avail / widest).toFixed(3));
+  }
+
+  /* ---------- Header menu (tablet / mobile) ---------- */
+  const header = $(".header");
+  const toggle = $(".menu-toggle");
+  const panel = $("#tablet-navigation");
+  const toggleVisible = () => getComputedStyle(toggle).display !== "none";
+  function setMenu(open, focusFirst) {
+    header.classList.toggle("menu-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    panel.inert = toggleVisible() && !open;
+    if (open && focusFirst) requestAnimationFrame(() => panel.querySelector("a").focus());
+  }
+  toggle.addEventListener("click", () => setMenu(!header.classList.contains("menu-open"), true));
+  panel.addEventListener("click", (e) => {
+    if (toggleVisible() && e.target.closest("a, button")) setMenu(false);
+  });
+  document.addEventListener("pointerdown", (e) => {
+    if (header.classList.contains("menu-open") && !header.contains(e.target)) setMenu(false);
+  });
+  let lastVisible = toggleVisible();
+  window.addEventListener("resize", () => {
+    const visible = toggleVisible();
+    if (visible !== lastVisible) { lastVisible = visible; setMenu(false); }
+    fitTitle();
+  });
+
+  /* ---------- Order sheet ---------- */
+  const sheet = $("#orderSheet");
+  const form = $("#orderForm");
+  let returnFocus = null;
+  function openSheet(pkg) {
+    returnFocus = document.activeElement;
+    if (pkg) { const r = $(`input[name=package][value="${pkg}"]`); if (r) r.checked = true; }
+    document.body.classList.add("sheet-open");
+    sheet.inert = false;
+    requestAnimationFrame(() => $("#sheetClose").focus());
+  }
+  function closeSheet() {
+    document.body.classList.remove("sheet-open");
+    sheet.inert = true;
+    if (returnFocus && returnFocus.focus) returnFocus.focus();
+  }
+  $$("[data-open-order]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); openSheet(); }));
+  $("#sheetClose").addEventListener("click", closeSheet);
+  $("#sheetBackdrop").addEventListener("click", closeSheet);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (document.body.classList.contains("sheet-open")) closeSheet();
+      else if (header.classList.contains("menu-open")) { setMenu(false); toggle.focus(); }
+    }
+    if (e.key === "Tab" && document.body.classList.contains("sheet-open")) {
+      const f = $$("a[href], button, input, textarea", sheet).filter((el) => el.offsetParent !== null && !el.disabled);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  function buildOrder(fd) {
+    const pkg = CONFIG.packages.find((p) => p.id === fd.get("package"));
+    const lines = [
+      `🎬 ${t("msg.title")} — Suniylash`,
+      "",
+      `👤 ${t("msg.name")}: ${fd.get("name").trim()}`,
+      `📞 ${t("msg.phone")}: ${fd.get("phone").trim()}`,
+      `🏪 ${t("msg.business")}: ${fd.get("business").trim()}`,
+      `📂 ${t("msg.type")}: ${fd.get("type").trim()}`,
+      `📦 ${t("msg.package")}: ${pkg ? `${t(`pk.${pkg.id}.name`)} (${priceText(pkg)})` : t("pk.unsure")}`,
+      `🗣 ${t("msg.lang")}: ${t("f.lang." + fd.get("vlang"))}`,
+    ];
+    const details = fd.get("details").trim();
+    if (details) lines.push(`📝 ${t("msg.details")}: ${details}`);
+    return lines.join("\n");
+  }
+
+  form.addEventListener("input", (e) => {
+    if (e.target.matches(".input")) e.target.removeAttribute("aria-invalid");
+  });
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const missing = $$("[required]", form).filter((el) => !el.value.trim());
+    missing.forEach((el) => el.setAttribute("aria-invalid", "true"));
+    if (missing.length) {
+      $("#formError").textContent = t("f.required");
+      missing[0].focus();
+      return;
+    }
+    $("#formError").textContent = "";
+    const text = buildOrder(new FormData(form));
+    const url = tgUrl(text);
+    $("#orderText").textContent = text;
+    $("#tgAgain").href = url;
+    sheet.classList.add("done");
+    $(".sheet-body").scrollTop = 0;
+    window.location.href = url;
+  });
+  $("#copyBtn").addEventListener("click", async () => {
+    const text = $("#orderText").textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch {}
+      ta.remove();
+    }
+    $("#copyBtn").textContent = t("ok.copied");
+    setTimeout(() => ($("#copyBtn").textContent = t("ok.copy")), 2000);
+  });
+  $("#newOrder").addEventListener("click", () => {
+    form.reset();
+    renderPackages();
+    sheet.classList.remove("done");
+  });
+
+  /* ---------- Videos ---------- */
+  $(".background").src = CONFIG.heroVideo;
+
+  const soundIcon = `<svg class="off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9Z"/><path d="m17 9 4 6M21 9l-4 6"/></svg><svg class="on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>`;
+  $("#creationGrid").innerHTML = CONFIG.creations.map((c) => (c
+    ? `<figure class="creation${c.vertical ? " is-vertical" : ""}">
+        <div class="film-frame" style="--poster: url('${c.poster}')">
+          <video class="creation-video" muted loop playsinline preload="none" poster="${c.poster}" data-src="${c.src}"></video>
+          <button class="sound-toggle" type="button" data-i18n-aria="cr.sound">${soundIcon}</button>
+        </div>
+      </figure>`
+    : `<figure class="creation is-empty">
+        <div class="film-frame"><div class="creation-soon"><img src="assets/logo-mark.png" alt=""><span data-i18n="cr.soon"></span></div></div>
+      </figure>`)).join("");
+
+  // Background and creation videos only load and play while on screen.
+  const statementVideo = $(".statement-video");
+  statementVideo.dataset.src = CONFIG.globalVideo;
+  const lazyVideos = [statementVideo, ...$$(".creation-video")];
+  const onScreen = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting) {
+        if (!target.getAttribute("src")) target.src = target.dataset.src;
+        target.play().catch(() => {});
+      } else {
+        target.pause();
+      }
+    });
+  }, { threshold: 0.2 });
+  lazyVideos.forEach((v) => onScreen.observe(v));
+
+  // Tapping a creation turns its sound on (and every other one off).
+  $("#creationGrid").addEventListener("click", (e) => {
+    const card = e.target.closest(".creation:not(.is-empty)");
+    if (!card) return;
+    const video = card.querySelector("video");
+    const unmute = video.muted;
+    $$(".creation").forEach((other) => {
+      other.classList.remove("is-unmuted");
+      const v = other.querySelector("video");
+      if (v) v.muted = true;
+    });
+    video.muted = !unmute;
+    card.classList.toggle("is-unmuted", unmute);
+    if (unmute) video.play().catch(() => {});
+  });
+
+  /* ---------- Init ---------- */
+  $$(".js-ig").forEach((a) => (a.href = igUrl));
+  $$(".js-tg").forEach((a) => (a.href = tgUrl()));
+  $("#igDm").href = `https://ig.me/m/${CONFIG.instagram}`;
+  $$(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+  const params = new URLSearchParams(location.search);
+  const guess = (navigator.language || "").slice(0, 2);
+  setLang(params.get("lang") || store.get("suniylash.lang") || (guess === "ru" || guess === "en" ? guess : "uz"));
+  setMenu(false);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
+  if (params.has("order") || params.has("package") || location.hash === "#order") openSheet(params.get("package"));
+})();
+</script>
+</body>
+</html>
