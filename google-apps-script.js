@@ -8,6 +8,8 @@
  *    Execute as: Me. Who has access: Anyone. -> Deploy -> allow access.
  * 4. Copy the Web app URL into CONFIG.orderEndpoint in index.html.
  */
+// The "Suniylash — Buyurtmalar" sheet that receives the orders.
+const SHEET_ID = "1KKIu6U5oqf28Nvc1Y6N5_Z-8M49CqZBCbdRc0SgO-WE";
 const FIELDS = ["name", "phone", "business", "type", "package", "vlang", "details", "lang"];
 
 function doPost(e) {
@@ -21,7 +23,7 @@ function doPost(e) {
     return /^[=+\-@]/.test(s) ? "'" + s : s;
   };
   const row = [new Date()].concat(FIELDS.map((f) => clean(p[f])));
-  SpreadsheetApp.getActiveSpreadsheet().getSheets()[0].appendRow(row);
+  SpreadsheetApp.openById(SHEET_ID).getSheets()[0].appendRow(row);
 
   // Email the sheet owner about the new order.
   try {
