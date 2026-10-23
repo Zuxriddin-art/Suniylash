@@ -25,17 +25,16 @@
   })();
 </script>
 <style>
-  /* Optional: drop Reference Sans / Display variable fonts into ./fonts to use them;
-     otherwise Onest (Latin + Cyrillic) is used. */
+  /* Reference Sans / Display are used when installed; otherwise Onest (Latin + Cyrillic). */
   @font-face {
     font-family: "Reference Sans";
-    src: local("Reference Sans"), url("fonts/ReferenceSans-Variable.woff2") format("woff2");
+    src: local("Reference Sans");
     font-weight: 100 900;
     font-display: swap;
   }
   @font-face {
     font-family: "Reference Display";
-    src: local("Reference Display"), url("fonts/ReferenceDisplay-Variable.woff2") format("woff2");
+    src: local("Reference Display");
     font-weight: 400 900;
     font-display: swap;
   }
@@ -1204,10 +1203,17 @@ const CONFIG = {
   orderEndpoint: "https://script.google.com/macros/s/AKfycbx5e2C2-ZAvOmB2NJ8Acz4A4QkwRh1Ht9Wfozwh2l7cKqeOaoqJvV1TLdYn7dm5CEPf/exec",
   instagram: "suniylash",   // Instagram username, without @
   telegram: "suniylash",    // Telegram username that receives orders, without @
-  // First-screen background video (from the sample design).
-  heroVideo: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_064556_051587f1-74a1-4336-8c05-4dde3594ed05.mp4",
+  // Background videos. "mobile" is a light 9:16 crop for phones; poster shows while the video loads.
+  // First screen (from the sample design).
+  heroVideo: {
+    src: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/94d2d3c1-93bf-4695-a64b-5e0b177039e4.mp4", poster: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/caaeb300-5b26-473f-9d94-6d13f17e0fad.jpg",
+    mobile: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/66d587db-490c-4275-b024-285813ff77d2.mp4", mobilePoster: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/0733f152-4e9c-4930-b356-b6bb32d3c779.jpg",
+  },
   // Second screen: Red Bull + Uzum highlight reel behind the "global" statement.
-  globalVideo: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/e7b86daf-7ca5-4c83-9c8e-e1896ebf1a96.mp4",
+  globalVideo: {
+    src: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/e7b86daf-7ca5-4c83-9c8e-e1896ebf1a96.mp4", poster: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/6e8aebb2-7eab-462a-a026-ce6dd1d00fb2.jpg",
+    mobile: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/d4034278-8f3b-4f1c-924a-d263ea265b97.mp4", mobilePoster: "https://d2ol7oe51mr4n9.cloudfront.net/user_3J2Awm2FqCb9gyjMKvVXHhTbjU2/712847db-f669-428f-83c4-1995ebd5809a.jpg",
+  },
   // "Creations" grid. vertical: true for 9:16 videos. null shows a "coming soon" card.
   creations: [
     { src: "assets/creations/creation-1.mp4", poster: "assets/creations/creation-1.jpg" },
@@ -1577,7 +1583,13 @@ const I18N = {
   });
 
   /* ---------- Videos ---------- */
-  $(".background").src = CONFIG.heroVideo;
+  // Portrait screens (phones) get the light vertical versions.
+  const portrait = matchMedia("(max-aspect-ratio: 1/1)").matches;
+  const pick = (v) => (portrait ? { src: v.mobile, poster: v.mobilePoster } : v);
+  const heroVideo = $(".background");
+  heroVideo.poster = pick(CONFIG.heroVideo).poster;
+  heroVideo.src = pick(CONFIG.heroVideo).src;
+  heroVideo.play().catch(() => {});
 
   const soundIcon = `<svg class="off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9Z"/><path d="m17 9 4 6M21 9l-4 6"/></svg><svg class="on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>`;
   $("#creationGrid").innerHTML = CONFIG.creations.map((c) => (c
@@ -1593,7 +1605,8 @@ const I18N = {
 
   // Background and creation videos only load and play while on screen.
   const statementVideo = $(".statement-video");
-  statementVideo.dataset.src = CONFIG.globalVideo;
+  statementVideo.poster = pick(CONFIG.globalVideo).poster;
+  statementVideo.dataset.src = pick(CONFIG.globalVideo).src;
   const lazyVideos = [statementVideo, ...$$(".creation-video")];
   const onScreen = new IntersectionObserver((entries) => {
     entries.forEach(({ target, isIntersecting }) => {
